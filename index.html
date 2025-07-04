@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Candidate Profile Portal</title>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js"></script>
+</head>
+<body>
+  <h2>Update Your Profile</h2>
+  <form id="profileForm">
+    <input type="text" id="name" placeholder="Full Name" required /><br><br>
+    <input type="email" id="email" placeholder="Email (Login)" required readonly /><br><br>
+    <input type="text" id="phone" placeholder="Phone" /><br><br>
+    <textarea id="skills" placeholder="Skills"></textarea><br><br>
+    <input type="url" id="resume" placeholder="Resume URL (Google Drive)" /><br><br>
+    <button type="submit">Update Profile</button>
+  </form>
+  <div id="status"></div>
+  <script src="firebase-config.js"></script>
+  <script src="form-submit.js"></script>
+</body>
+</html>
