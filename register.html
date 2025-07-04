@@ -71,7 +71,6 @@
   </div>
 
   <script>
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     const firebaseConfig = {
       apiKey: "AIzaSyANj6t_0ZK1O081-MidGvq_5TuXZtXZUtQ",
       authDomain: "candidateportal-3c671.firebaseapp.com",
@@ -100,11 +99,24 @@
 
       try {
         await auth.createUserWithEmailAndPassword(email, password);
-        window.location.href = "index.html";
+
+        // Hide the form and show success message
+        form.style.display = "none";
+        errorMsg.style.color = "green";
+        errorMsg.textContent = "✅ Registration successful!";
+        
+        const loginBtn = document.createElement("button");
+        loginBtn.textContent = "Go to Login";
+        loginBtn.style.marginTop = "20px";
+        loginBtn.onclick = () => window.location.href = "index.html";
+        document.querySelector(".register-container").appendChild(loginBtn);
+
       } catch (error) {
+        errorMsg.style.color = "red";
         errorMsg.textContent = error.message;
       }
     });
   </script>
+
 </body>
 </html>
