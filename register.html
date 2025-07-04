@@ -71,50 +71,61 @@
   </div>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyANj6t_0ZK1O081-MidGvq_5TuXZtXZUtQ",
-      authDomain: "candidateportal-3c671.firebaseapp.com",
-      projectId: "candidateportal-3c671",
-      storageBucket: "candidateportal-3c671.firebasestorage.app",
-      messagingSenderId: "71599460872",
-      appId: "1:71599460872:web:e48b29fc659b60d49b77bd",
-      measurementId: "G-T561E43LL6"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    document.addEventListener("DOMContentLoaded", function () {
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyANj6t_0ZK1O081-MidGvq_5TuXZtXZUtQ",
+        authDomain: "candidateportal-3c671.firebaseapp.com",
+        projectId: "candidateportal-3c671",
+        storageBucket: "candidateportal-3c671.appspot.com",
+        messagingSenderId: "71599460872",
+        appId: "1:71599460872:web:e48b29fc659b60d49b77bd",
+        measurementId: "G-T561E43LL6"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
 
-    const form = document.getElementById("registerForm");
-    const errorMsg = document.getElementById("errorMsg");
+      const form = document.getElementById("registerForm");
+      const errorMsg = document.getElementById("errorMsg");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const confirmPassword = document.getElementById("confirmPassword").value.trim();
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
-      if (password !== confirmPassword) {
-        errorMsg.textContent = "Passwords do not match.";
-        return;
-      }
+        if (password !== confirmPassword) {
+          errorMsg.style.color = "red";
+          errorMsg.textContent = "Passwords do not match.";
+          return;
+        }
 
-      try {
-        await auth.createUserWithEmailAndPassword(email, password);
+        try {
+          await auth.createUserWithEmailAndPassword(email, password);
 
-        // Hide the form and show success message
-        form.style.display = "none";
-        errorMsg.style.color = "green";
-        errorMsg.textContent = "✅ Registration successful!";
-        
-        const loginBtn = document.createElement("button");
-        loginBtn.textContent = "Go to Login";
-        loginBtn.style.marginTop = "20px";
-        loginBtn.onclick = () => window.location.href = "index.html";
-        document.querySelector(".register-container").appendChild(loginBtn);
+          // Hide the form and show success message
+          form.style.display = "none";
+          errorMsg.style.color = "green";
+          errorMsg.textContent = "✅ Registration successful!";
 
-      } catch (error) {
-        errorMsg.style.color = "red";
-        errorMsg.textContent = error.message;
-      }
+          const loginBtn = document.createElement("button");
+          loginBtn.textContent = "Go to Login";
+          loginBtn.style.marginTop = "20px";
+          loginBtn.style.backgroundColor = "#1e88e5";
+          loginBtn.style.color = "white";
+          loginBtn.style.padding = "12px";
+          loginBtn.style.border = "none";
+          loginBtn.style.borderRadius = "8px";
+          loginBtn.style.fontSize = "16px";
+          loginBtn.style.cursor = "pointer";
+          loginBtn.onclick = () => window.location.href = "index.html";
+
+          document.querySelector(".register-container").appendChild(loginBtn);
+        } catch (error) {
+          errorMsg.style.color = "red";
+          errorMsg.textContent = error.message;
+        }
+      });
     });
   </script>
 
