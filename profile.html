@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Profile Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #1e88e5;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    textarea {
+      resize: vertical;
+    }
+    button {
+      margin-top: 30px;
+      background-color: #1e88e5;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1565c0;
+    }
+    .section-title {
+      margin-top: 40px;
+      font-size: 18px;
+      color: #444;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Candidate Profile Form</h1>
+    <form id="candidateForm">
+      <div class="section-title">1. Personal Information</div>
+      <label>Full Name</label>
+      <input type="text" name="fullName" required>
+      <label>Contact Number</label>
+      <input type="text" name="contactNumber">
+      <label>Email Address</label>
+      <input type="email" name="email" required>
+      <label>LinkedIn Profile</label>
+      <input type="url" name="linkedin">
+      <label>Location (City/Country)</label>
+      <input type="text" name="location">
+      <label>JobStreet Profile Link</label>
+      <input type="url" name="jobstreet">
+
+      <div class="section-title">2. Professional Summary / Career Objective</div>
+      <textarea name="summary" rows="4"></textarea>
+
+      <div class="section-title">3. Work Experience</div>
+      <label>Job Title</label>
+      <input type="text" name="jobTitle">
+      <label>Company Name</label>
+      <input type="text" name="companyName">
+      <label>Employment Period (Month/Year – Month/Year)</label>
+      <input type="text" name="employmentPeriod">
+      <label>Key Responsibilities & Achievements</label>
+      <textarea name="responsibilities" rows="4"></textarea>
+
+      <div class="section-title">4. Education Background</div>
+      <label>Degree/Diploma</label>
+      <input type="text" name="degree">
+      <label>University/Institution Name</label>
+      <input type="text" name="institution">
+      <label>Graduation Year</label>
+      <input type="text" name="graduationYear">
+      <label>Honors/Awards</label>
+      <textarea name="awards" rows="3"></textarea>
+
+      <div class="section-title">5. Skills & Competencies</div>
+      <label>Technical Skills</label>
+      <textarea name="techSkills" rows="3"></textarea>
+      <label>Soft Skills</label>
+      <textarea name="softSkills" rows="3"></textarea>
+      <label>Industry-Specific Skills</label>
+      <textarea name="industrySkills" rows="3"></textarea>
+
+      <div class="section-title">6. Certifications & Training</div>
+      <label>Certification Name</label>
+      <input type="text" name="certName">
+      <label>Issuing Organization</label>
+      <input type="text" name="issuer">
+      <label>Year Obtained</label>
+      <input type="text" name="certYear">
+
+      <div class="section-title">7. Languages Spoken</div>
+      <textarea name="languages" rows="3" placeholder="e.g., English (Fluent), Malay (Fluent), Mandarin (Intermediate)"></textarea>
+
+      <div class="section-title">8. References (Optional)</div>
+      <textarea name="references" rows="3" placeholder="Available upon request or include reference names/contact"></textarea>
+
+      <div class="section-title">9. Additional Sections (Optional)</div>
+      <label>Projects</label>
+      <textarea name="projects" rows="3"></textarea>
+      <label>Volunteer Work</label>
+      <textarea name="volunteer" rows="3"></textarea>
+      <label>Portfolio/Website Link</label>
+      <input type="url" name="portfolio">
+
+      <button type="submit">Save Profile</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("candidateForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = document.getElementById("candidateForm");
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
+      localStorage.setItem("candidateData", JSON.stringify(data));
+      window.location.href = "resume.html";
+    });
+  </script>
+</body>
+</html>
