@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Register - Candidate Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js"></script>
+  <!-- Updated Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -28,14 +29,16 @@
     h2 {
       text-align: center;
       color: #1e88e5;
+      margin-bottom: 20px;
     }
     input {
       width: 100%;
       padding: 12px;
-      margin: 15px 0;
+      margin: 10px 0;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 14px;
+      box-sizing: border-box;
     }
     button {
       width: 100%;
@@ -46,15 +49,39 @@
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s;
     }
     button:hover {
       background-color: #1565c0;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
     }
     .error {
       color: red;
       font-size: 14px;
       text-align: center;
-      margin-top: 10px;
+      margin: 10px 0;
+      min-height: 20px;
+    }
+    .success {
+      color: green;
+      font-size: 14px;
+      text-align: center;
+      margin: 10px 0;
+    }
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .login-link a {
+      color: #1e88e5;
+      text-decoration: none;
+    }
+    .login-link a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -63,11 +90,14 @@
     <h2>Create Account</h2>
     <form id="registerForm">
       <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
+      <input type="password" id="password" placeholder="Password (min 6 characters)" required />
       <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
-      <button type="submit">Register</button>
+      <button type="submit" id="registerBtn">Register</button>
+      <div class="error" id="errorMsg"></div>
+      <div class="login-link">
+        Already have an account? <a href="login.html">Login here</a>
+      </div>
     </form>
-    <p class="error" id="errorMsg"></p>
   </div>
 
   <script>
@@ -82,52 +112,77 @@
         appId: "1:71599460872:web:e48b29fc659b60d49b77bd",
         measurementId: "G-T561E43LL6"
       };
+
+      // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
 
       const form = document.getElementById("registerForm");
       const errorMsg = document.getElementById("errorMsg");
+      const registerBtn = document.getElementById("registerBtn");
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        
+        // Get form values
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value.trim();
         const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
+        // Reset error message
+        errorMsg.textContent = "";
+        errorMsg.className = "error";
+        
+        // Validate inputs
+        if (!email || !password || !confirmPassword) {
+          errorMsg.textContent = "Please fill in all fields.";
+          return;
+        }
+
+        if (password.length < 6) {
+          errorMsg.textContent = "Password must be at least 6 characters.";
+          return;
+        }
+
         if (password !== confirmPassword) {
-          errorMsg.style.color = "red";
           errorMsg.textContent = "Passwords do not match.";
           return;
         }
 
+        // Disable button during submission
+        registerBtn.disabled = true;
+        registerBtn.textContent = "Creating account...";
+
         try {
+          // Create user with Firebase Auth
           await auth.createUserWithEmailAndPassword(email, password);
-
-          // Hide the form and show success message
-          form.style.display = "none";
-          errorMsg.style.color = "green";
-          errorMsg.textContent = "✅ Registration successful!";
-
-          const loginBtn = document.createElement("button");
-          loginBtn.textContent = "Go to Login";
-          loginBtn.style.marginTop = "20px";
-          loginBtn.style.backgroundColor = "#1e88e5";
-          loginBtn.style.color = "white";
-          loginBtn.style.padding = "12px";
-          loginBtn.style.border = "none";
-          loginBtn.style.borderRadius = "8px";
-          loginBtn.style.fontSize = "16px";
-          loginBtn.style.cursor = "pointer";
-          loginBtn.onclick = () => window.location.href = "index.html";
-
-          document.querySelector(".register-container").appendChild(loginBtn);
+          
+          // On success
+          errorMsg.className = "success";
+          errorMsg.textContent = "Registration successful! Redirecting to login...";
+          
+          // Redirect after short delay
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 1500);
+          
         } catch (error) {
-          errorMsg.style.color = "red";
-          errorMsg.textContent = error.message;
+          // Handle errors
+          let message = error.message;
+          if (error.code === "auth/email-already-in-use") {
+            message = "This email is already registered.";
+          } else if (error.code === "auth/invalid-email") {
+            message = "Please enter a valid email address.";
+          } else if (error.code === "auth/weak-password") {
+            message = "Password should be at least 6 characters.";
+          }
+          
+          errorMsg.textContent = message;
+          registerBtn.disabled = false;
+          registerBtn.textContent = "Register";
         }
       });
     });
   </script>
-
 </body>
 </html>
